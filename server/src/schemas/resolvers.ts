@@ -1,9 +1,11 @@
 import { GraphQLError } from "graphql";
-import { User } from "../models/index.js";
+import { User, Schedule } from "../models/index.js";
 import { signToken } from "../utils/auth.js";
 import type IUserContext from "../interfaces/UserContext";
 import type IUserDocument from "../interfaces/UserDocument";
 import { Types } from "mongoose";
+import type IScheduleDocument from "../interfaces/ScheduleDocument";
+
 
 
 const forbiddenException = new GraphQLError(
@@ -53,6 +55,24 @@ const resolvers = {
 
       const token = signToken(user.username, user.email, user._id as Types.ObjectId);
       return { token, user: user as IUserDocument };
+    },
+    addMeetingSchedule: async (
+      _parent: any,
+      args: any,
+      context: IUserContext,
+    ) => {
+      if (context.user) {
+        const schedule = await Schedule.create(args);
+        console.log(schedule);
+        const user=await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $push: { meetingSchedules: schedule._id } },
+          { new: true },
+        )
+        console.log(user);
+        return schedule.populate("dateId");
+      }
+      throw forbiddenException;
     },
   }
 };

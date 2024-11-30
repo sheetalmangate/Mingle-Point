@@ -6,6 +6,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   isCorrectPassword(password: string): Promise<boolean>;
+  meetingSchedules?: Types.ObjectId[];
   
 }
 
@@ -26,6 +27,13 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    meetingSchedules: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Schedule",
+      },
+    ],
+
     
   },
   // set this to use virtual below

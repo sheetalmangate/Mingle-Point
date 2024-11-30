@@ -5,10 +5,17 @@ const typeDefs = gql`
     _id: ID
     username: String!
     email: String!
-    
+    meetingSchedules: [Schedule]
   }
 
-  
+  type Schedule {
+    _id: ID
+    description: String
+    startTime: String!
+    endTime: String!
+    location: String
+    dateId: User!
+  }
   
 
   type Auth {
@@ -26,6 +33,7 @@ const typeDefs = gql`
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
+    addMeetingSchedule(description: String, startTime: String!, endTime: String!, location: String, dateId:ID!): Schedule, 
     
   }
 `;

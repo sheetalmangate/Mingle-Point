@@ -1,7 +1,7 @@
 import { Schema, model, type Document, Types } from "mongoose";
 
 interface ISchedule extends Document {
-  date: string;
+  
   startTime: string;
   endTime: string;
   description: string | null;
@@ -11,10 +11,7 @@ interface ISchedule extends Document {
 
 const scheduleSchema = new Schema<ISchedule>(
   {
-    date: {
-      type: String,
-      required: true,
-      },
+    
     startTime: {
       type: String,
       required: true,
