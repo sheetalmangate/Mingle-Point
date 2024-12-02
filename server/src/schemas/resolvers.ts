@@ -35,7 +35,7 @@ const resolvers = {
       const user = await User.create(args);
       const token = signToken(user.username, user.email, user._id as Types.ObjectId);
 
-      return { token, user: user as IUserDocument };
+      return { token, user};
     },
     login: async (
       _parent: any,
@@ -52,7 +52,7 @@ const resolvers = {
       }
 
       const token = signToken(user.username, user.email, user._id as Types.ObjectId);
-      return { token, user: user as IUserDocument };
+      return { token, user };
     },
   }
 };
