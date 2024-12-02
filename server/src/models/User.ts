@@ -5,16 +5,25 @@ interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  name?: string;
+  age?: number;
+  hobbies?: string[];
+  profilePicture?: string;
+  pendingRequests: Types.ObjectId[];
+  followers: Types.ObjectId[];
+  following: Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
-  
 }
+
+//Fields for name, age, hobbies, and profilePicture.
+//Added pendingRequests, followers, and following arrays.
 
 const userSchema = new Schema<IUser>(
   {
     username: {
       type: String,
       required: true,
-      unique: true, // instantly creates a b-tree index on the username field for fast lookups
+      unique: true,
     },
     email: {
       type: String,
@@ -26,14 +35,42 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
-    
+    name: {
+      type: String,
+    },
+    age: {
+      type: Number,
+    },
+    hobbies: {
+      type: [String],
+    },
+    profilePicture: {
+      type: String,
+    },
+    pendingRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
-  // set this to use virtual below
   {
     toJSON: {
       virtuals: true,
     },
-  },
+  }
 );
 
 // hash user password
@@ -42,17 +79,14 @@ userSchema.pre<IUser>("save", async function (next) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-
   next();
 });
 
 userSchema.methods.isCorrectPassword = async function (
-  password: string,
+  password: string
 ): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
-
-
 
 const User = model<IUser>("User", userSchema);
 
