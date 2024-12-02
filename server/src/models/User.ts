@@ -1,5 +1,6 @@
 import { Schema, model, type Document, Types } from "mongoose";
 import bcrypt from "bcrypt";
+import IScheduleDocument from "../interfaces/ScheduleDocument";
 
 interface IUser extends Document {
   _id: Types.ObjectId;
@@ -7,7 +8,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   isCorrectPassword(password: string): Promise<boolean>;
-  meetingSchedules?: Types.ObjectId[];
+  meetingSchedules?: Types.ObjectId[] | IScheduleDocument[];
   
 }
 
