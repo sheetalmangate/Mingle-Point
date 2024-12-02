@@ -4,7 +4,7 @@ import { signToken } from "../utils/auth.js";
 import type IUserContext from "../interfaces/UserContext";
 import type IUserDocument from "../interfaces/UserDocument";
 import { Types } from "mongoose";
-import type IScheduleDocument from "../interfaces/ScheduleDocument";
+
 
 
 
@@ -63,13 +63,16 @@ const resolvers = {
     ) => {
       if (context.user) {
         const schedule = await Schedule.create(args);
-        console.log(schedule);
-        const user=await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
           { _id: context.user._id },
           { $push: { meetingSchedules: schedule._id } },
           { new: true },
         )
-        console.log(user);
+        await User.findOneAndUpdate(
+          { _id: args.dateId },
+          { $push: { meetingSchedules: schedule._id } },
+          { new: true },
+        )
         return schedule.populate("dateId");
       }
       throw forbiddenException;
