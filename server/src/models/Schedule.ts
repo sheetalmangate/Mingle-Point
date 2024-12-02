@@ -1,7 +1,8 @@
-import { Schema, model, type Document, Types } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
-interface ISchedule extends Document {
-  
+interface ISchedule  {
+  _id: Types.ObjectId;
+  date: string;
   startTime: string;
   endTime: string;
   description: string | null;
