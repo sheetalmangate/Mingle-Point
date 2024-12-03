@@ -15,11 +15,8 @@ interface IUser extends Document {
   followers: Types.ObjectId[];
   following: Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
-<<<<<<< HEAD
   meetingSchedules?: Types.ObjectId[] | IScheduleDocument[];
   
-=======
->>>>>>> 9d9c287c99ea723d2c383a007351bcff35c73e08
 }
 
 //Fields for name, age, hobbies, and profilePicture.
