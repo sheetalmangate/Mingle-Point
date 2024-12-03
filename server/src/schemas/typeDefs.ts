@@ -8,27 +8,14 @@ const typeDefs = gql`
     meetingSchedules: [Schedule]
   }
 
-  type Schedule {
-    _id: ID
-    description: String
-    startDate: String!
-    endDate: String!
-    location: String
-    dateId: User!
-    text: String!
-  }
-  
-
   type Auth {
     token: ID!
     user: User
   }
 
-  
-
   type Query {
     me: User
-    
+    user(_id:ID):  User
   }
 
   type Mutation {
@@ -36,6 +23,8 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addMeetingSchedule(description: String, startDate: String!, endDate: String!, location: String, dateId:ID!, text: String!): Schedule, 
     
+    sendFollowRequest(toUserId:ID!) : User
+    respondFollowRequest(fromUserId: String, accept: Boolean): User
   }
 `;
 
