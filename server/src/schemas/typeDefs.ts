@@ -5,6 +5,13 @@ const typeDefs = gql`
     _id: ID
     username: String!
     email: String!
+    name: String
+    age: Int
+    hobbies: [String]
+    profilePicture: String
+    pendingRequests: [User]
+    followers: [User]
+    following: [User]
     meetingSchedules: [Schedule]
   }
 

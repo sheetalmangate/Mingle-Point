@@ -3,6 +3,7 @@ import { User, Schedule } from "../models/index.js";
 import { signToken } from "../utils/auth.js";
 import type IUserContext from "../interfaces/UserContext";
 import { Types } from "mongoose";
+import IUserDocument from "../interfaces/UserDocument.js";
 
 const forbiddenException = new GraphQLError(
   "You are not authorized to perform this action.",
@@ -28,7 +29,7 @@ const resolvers = {
       _parent: any,
       { _id }: { _id: string },
       context: IUserContext
-    ) => {
+    ):Promise <IUserDocument | null> => { 
       if (context.user) {
         const params = _id
           ? { _id: new Types.ObjectId(_id) }
@@ -38,7 +39,9 @@ const resolvers = {
           throw new GraphQLError("User not found.", {
             extensions: { code: "NOT_FOUND" },
           });
-        return user;
+        return user
+          .populate([ "meetingSchedules", "pendingRequests", "followers", "following" ])
+          
       }
       throw forbiddenException;
     },
