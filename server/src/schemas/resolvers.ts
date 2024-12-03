@@ -65,6 +65,15 @@ const resolvers = {
       );
       return { token, user };
     },
+    logout: async (_: any, __: any, context: any): Promise<boolean> => {
+      // Invalidate the token (implementation depends on your token management strategy)
+      // For example, you could add the token to a blacklist
+      if (context.user) {
+        // Perform logout logic here
+        return true;
+      }
+      return false;
+    },
     sendFollowRequest: async (
       _parent: any,
       { toUserId }: { toUserId: string },
