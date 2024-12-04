@@ -4,7 +4,9 @@ import { signToken } from "../utils/auth.js";
 import type IUserContext from "../interfaces/UserContext";
 import { Types } from "mongoose";
 import IUserDocument from "../interfaces/UserDocument.js";
-
+import { saveMessage, getMessages } from "../utils/chatbox.js";
+import type Context from "../interfaces/context.js"
+const MESSAGE_ADDED = 'MESSAGE_ADDED';
 const forbiddenException = new GraphQLError(
   "You are not authorized to perform this action.",
   {
@@ -45,6 +47,17 @@ const resolvers = {
       }
       throw forbiddenException;
     },
+    messages: async (_: any, { sender, receiver }: { sender: string; receiver: string }) => {
+
+      // Return messages from your data source
+      const messages = await getMessages(sender, receiver);
+      return messages;
+    },
+    users: async () => {
+      // Return all users from your data source
+      const users = await User.find({});
+      return users;
+    },  
   },
 
   Mutation: {
@@ -157,6 +170,37 @@ const resolvers = {
 
       await user.save();
       return user;
+    },
+  sendMessage: async (_: any, { content, username }: { content: string; username: string }, context: Context) => {
+    if (!context.user || !context.user.username) {
+      throw forbiddenException;
+    }
+    const sender = context.user.username;
+    const message = await saveMessage(sender, username, content);
+    try{
+     await context.pubsub.publish(MESSAGE_ADDED, { messageAdded: message });
+    console.log('Message published successfully');
+    return message;
+    } catch (error) {
+      console.error("Failed to publish message:", error);
+      return null;
+    }
+  },
+},
+  Subscription: {
+    messageAdded: {
+      subscribe: (_: any, __: any, context: Context) => {
+        return context.pubsub.asyncIterator(MESSAGE_ADDED);
+      },
+      resolve: (payload: { messageAdded: any }, context: Context) => {
+        console.log('Receiver:', payload.messageAdded.receiver);
+        console.log('Current user:', context.user ? context.user.username : 'null');
+        // Filter messages to only send to the intended receiver
+        if (context.user && (payload.messageAdded.receiver === context.user.username || payload.messageAdded.sender === context.user.username) ) {
+          return payload.messageAdded;
+        }
+        return null;
+      },
     },
   },
 };
