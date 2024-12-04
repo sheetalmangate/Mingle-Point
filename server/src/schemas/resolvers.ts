@@ -1,8 +1,9 @@
 import { GraphQLError } from "graphql";
-import { User } from "../models/index.js";
+import { User, Schedule } from "../models/index.js";
 import { signToken } from "../utils/auth.js";
 import type IUserContext from "../interfaces/UserContext";
 import { Types } from "mongoose";
+import IUserDocument from "../interfaces/UserDocument.js";
 
 const forbiddenException = new GraphQLError(
   "You are not authorized to perform this action.",
@@ -17,22 +18,32 @@ const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: IUserContext) => {
       if (context.user) {
-        const user = await User.findById(context.user._id).populate([
-          "pendingRequests",
-          "followers",
-          "following",
-        ]);
+        const user = await User.findById(context.user._id)
+          .populate(["pendingRequests", "followers", "following"])
+          .populate({ path: "meetingSchedules", populate: { path: "dateId" } });
         return user;
       }
       throw forbiddenException;
     },
-    user: async (_parent: any, { _id }: { _id: string }) => {
-      const user = await User.findById(new Types.ObjectId(_id));
-      if (!user)
-        throw new GraphQLError("User not found.", {
-          extensions: { code: "NOT_FOUND" },
-        });
-      return user;
+    user: async (
+      _parent: any,
+      { _id }: { _id: string },
+      context: IUserContext
+    ):Promise <IUserDocument | null> => { 
+      if (context.user) {
+        const params = _id
+          ? { _id: new Types.ObjectId(_id) }
+          : { _id: context.user._id };
+        const user = await User.findById(params);
+        if (!user)
+          throw new GraphQLError("User not found.", {
+            extensions: { code: "NOT_FOUND" },
+          });
+        return user
+          .populate([ "meetingSchedules", "pendingRequests", "followers", "following" ])
+          
+      }
+      throw forbiddenException;
     },
   },
 
@@ -65,6 +76,28 @@ const resolvers = {
       );
       return { token, user };
     },
+    addMeetingSchedule: async (
+      _parent: any,
+      args: any,
+      context: IUserContext
+    ) => {
+      if (context.user) {
+        const schedule = await Schedule.create(args);
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $push: { meetingSchedules: schedule._id } },
+          { new: true }
+        );
+        await User.findOneAndUpdate(
+          { _id: args.dateId },
+          { $push: { meetingSchedules: schedule._id } },
+          { new: true }
+        );
+        return schedule.populate("dateId");
+      }
+      throw forbiddenException;
+    },
+
     sendFollowRequest: async (
       _parent: any,
       { toUserId }: { toUserId: string },
@@ -80,7 +113,10 @@ const resolvers = {
 
       if (
         toUser.pendingRequests.some(
-          (id) => context.user && context.user._id && id.toString() === context.user._id.toString()
+          (id) =>
+            context.user &&
+            context.user._id &&
+            id.toString() === context.user._id.toString()
         )
       ) {
         throw new GraphQLError("Follow request already sent.", {
