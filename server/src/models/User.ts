@@ -1,5 +1,6 @@
 import { Schema, model, type Document, Types } from "mongoose";
 import bcrypt from "bcrypt";
+import IScheduleDocument from "../interfaces/ScheduleDocument";
 
 interface IUser extends Document {
   _id: Types.ObjectId;
@@ -14,6 +15,8 @@ interface IUser extends Document {
   followers: Types.ObjectId[];
   following: Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
+  meetingSchedules?: Types.ObjectId[] | IScheduleDocument[];
+  
 }
 
 //Fields for name, age, hobbies, and profilePicture.
@@ -36,6 +39,14 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    meetingSchedules: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Schedule",
+      },
+    ],
+
+    
     name: {
       type: String,
     },

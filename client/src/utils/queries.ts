@@ -1,10 +1,21 @@
 import { gql } from '@apollo/client';
-
-export const QUERY_PROFILE = gql `
-    query Profile($id: ID!) {
-        getProfile(_id: $id) {
-        
-        }
+export const GET_ME = gql`
+query Me {
+  me {
+    _id
+    username
+    email
+    meetingSchedules {
+      _id
+      description
+      startDate
+      endDate
+      location
+      dateId {
+        _id
+        username
+        email
+      }
     }
-`;
-
+  }
+}`;

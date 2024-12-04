@@ -5,7 +5,24 @@ const typeDefs = gql`
     _id: ID
     username: String!
     email: String!
-    
+    name: String
+    age: Int
+    hobbies: [String]
+    profilePicture: String
+    pendingRequests: [User]
+    followers: [User]
+    following: [User]
+    meetingSchedules: [Schedule]
+  }
+
+  type Schedule {
+    _id: ID
+    description: String
+    startDate: String!
+    endDate: String!
+    location: String
+    dateId: User!
+    text: String!
   }
 
   type Auth {
@@ -15,13 +32,22 @@ const typeDefs = gql`
 
   type Query {
     me: User
-    user(_id:ID!):  User
+    user(_id: ID): User
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    sendFollowRequest(toUserId:ID!) : User
+    addMeetingSchedule(
+      description: String
+      startDate: String!
+      endDate: String!
+      location: String
+      dateId: ID!
+      text: String!
+    ): Schedule
+
+    sendFollowRequest(toUserId: ID!): User
     respondFollowRequest(fromUserId: String, accept: Boolean): User
   }
 `;
