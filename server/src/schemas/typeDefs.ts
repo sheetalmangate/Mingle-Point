@@ -61,6 +61,7 @@ const typeDefs = gql`
       text: String!
     ): Schedule
 
+    addProfile(name:String, age:Int,hobbies:[String],profilePicture:String): User
  
     sendFollowRequest(toUserId: ID!): User
     respondFollowRequest(fromUserId: String, accept: Boolean): User
