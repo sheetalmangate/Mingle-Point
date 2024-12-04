@@ -16,3 +16,15 @@ mutation AddMeetingSchedule($startTime: String!, $endTime: String!, $dateId: ID!
     }
   }
 }`;
+
+export const ADD_PROFILE = gql`
+  mutation AddProfile($name: String, $age: Int, $hobbies: [String], $profilePicture: String) {
+  addProfile(name: $name, age: $age, hobbies: $hobbies, profilePicture: $profilePicture) {
+    _id
+    name
+    age
+    hobbies
+    profilePicture
+  }
+}
+`;
