@@ -17,8 +17,8 @@ export const authenticateToken = ({ req }: { req: Request }) => {
   }
 
   try {
-    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || "", {
-      maxAge: "48hr",
+    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || "MySecret", {
+      maxAge: "2h",
     });
     req.user = data satisfies JwtPayload;
   } catch (err) {
@@ -34,7 +34,7 @@ export const signToken = (
   _id: Types.ObjectId
 ) => {
   const payload = { username, email, _id };
-  const secretKey: string = process.env.JWT_SECRET_KEY || "";
+  const secretKey: string = process.env.JWT_SECRET_KEY || "MySecret";
 
   return jwt.sign({ data: payload }, secretKey, { expiresIn: "2h" });
 };
