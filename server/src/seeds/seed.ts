@@ -5,7 +5,7 @@ import cleanDB from './cleanDB.js';
 
 const seedDatabase = async (): Promise<void> => {
   try {
-    await db();
+    await db;
     await cleanDB();
 
     await User.insertMany(userSeeds);

@@ -158,6 +158,16 @@ const resolvers = {
       await user.save();
       return user;
     },
+    addProfile: async(_parent: any, args: any, context: IUserContext) => {
+      if(context.user) {
+
+        const user = await User.findByIdAndUpdate(context.user._id, {...args}, {new:true, runValidators: true});
+
+        return user;
+
+      }
+      throw forbiddenException
+    }
   },
 };
 
