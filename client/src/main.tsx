@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
   uri: 'http://localhost:3001/graphql',
 });
 
-const authLink = setContext(async (_: any, { headers = {} }: { headers?: Record<string, string> }) => {
+const authLink = setContext(async (_, { headers = {} }: { headers?: Record<string, string> }) => {
   const token = await getToken();
   return {
     headers: {

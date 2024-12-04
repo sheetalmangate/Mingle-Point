@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client';
 export const ADD_MEETING = gql`
-mutation AddMeetingSchedule($startTime: String!, $endTime: String!, $dateId: ID!, $description: String, $location: String) {
-  addMeetingSchedule(startTime: $startTime, endTime: $endTime, dateId: $dateId, description: $description, location: $location) {
+mutation AddMeetingSchedule($startDate: String!, $endDate: String!, $dateId: ID!, $description: String, $location: String, $text: String!) {
+  addMeetingSchedule(startDate: $startDate, endDate: $endDate, dateId: $dateId, description: $description, location: $location, text: $text) {
     _id
     description
-    startTime
-    endTime
+    startDate
+    endDate
+    text
     location
     dateId {
       _id

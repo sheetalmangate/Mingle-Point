@@ -22,11 +22,11 @@ export const GET_ME = gql`
 `;
 
 export const QUERY_USER = gql`
-  query User {
-    user {
+  query User($id: ID) {
+    user(_id: $id) {
       _id
-      username
       email
+      username
       name
       age
       hobbies
