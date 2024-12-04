@@ -19,3 +19,24 @@ query Me {
     }
   }
 }`;
+
+export const GET_MESSAGES = gql`
+  query GetMessages($sender: String!, $receiver: String!) {
+    messages(sender: $sender, receiver: $receiver) {
+      id
+      sender
+      receiver
+      content
+      timestamp
+    }
+  }
+`;
+export const GET_USERS = gql`
+query GetUsers{
+    users {
+         _id
+        username
+        email
+    }
+}
+`;

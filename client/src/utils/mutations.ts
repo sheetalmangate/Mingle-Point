@@ -16,3 +16,28 @@ mutation AddMeetingSchedule($startTime: String!, $endTime: String!, $dateId: ID!
     }
   }
 }`;
+
+export const SEND_MESSAGE = gql`
+  mutation SendMessage($content: String!, $username: String!) {
+    sendMessage(content: $content, username: $username) {
+      id
+      sender
+      receiver
+      content
+      timestamp
+    }
+  }
+`;
+
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
+    }
+  }
+`;
