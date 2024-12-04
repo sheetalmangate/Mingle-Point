@@ -41,3 +41,14 @@ export const LOGIN = gql`
     }
   }
 `;
+export const ADD_PROFILE = gql`
+  mutation AddProfile($name: String, $age: Int, $hobbies: [String], $profilePicture: String) {
+  addProfile(name: $name, age: $age, hobbies: $hobbies, profilePicture: $profilePicture) {
+    _id
+    name
+    age
+    hobbies
+    profilePicture
+  }
+}
+`;

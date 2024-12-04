@@ -20,23 +20,60 @@ query Me {
   }
 }`;
 
-export const GET_MESSAGES = gql`
-  query GetMessages($sender: String!, $receiver: String!) {
-    messages(sender: $sender, receiver: $receiver) {
-      id
-      sender
-      receiver
-      content
-      timestamp
+export const QUERY_USER = gql`
+  query User {
+  user {
+    _id
+    username
+    email
+    name
+    age
+    hobbies
+    profilePicture
+    pendingRequests {
+      _id
+      username
+      email
+      name
+      age
+      hobbies
+      profilePicture
     }
-  }
-`;
-export const GET_USERS = gql`
-query GetUsers{
-    users {
-         _id
+    followers {
+      _id
+      username
+      email
+      name
+      age
+      hobbies
+      profilePicture
+    }
+    following {
+      _id
+      username
+      email
+      name
+      age
+      hobbies
+      profilePicture
+    }
+    meetingSchedules {
+      _id
+      description
+      startDate
+      endDate
+      location
+      dateId {
+        _id
         username
         email
+        name
+        age
+        hobbies
+        profilePicture
+      }
+      text
     }
+  }
 }
 `;
