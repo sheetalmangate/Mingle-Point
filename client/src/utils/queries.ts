@@ -66,12 +66,6 @@ export const QUERY_USER = gql`
         location
         dateId {
           _id
-          username
-          email
-          name
-          age
-          hobbies
-          profilePicture
         }
         text
       }

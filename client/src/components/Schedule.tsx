@@ -6,30 +6,29 @@ import { ADD_MEETING } from "../utils/mutations";
 import { useParams } from 'react-router-dom';
 
 const Schedule = () => {
+  const xButton = document.querySelector("svg")?.parentNode as HTMLElement;
+  xButton?.click();
   const { userId } = useParams();
-  console.log(userId);
-  const { data, loading } = useQuery(QUERY_USER, {variables: {id:userId}});
-  console.log(data);
+  const { data, loading } = useQuery(QUERY_USER, { variables: { id: userId } });
   const scheduleData = data?.user.meetingSchedules || [];
-  console.log(scheduleData);
-  // const xButton = document.querySelector("svg")?.parentNode as HTMLElement;
-  // console.log(xButton);
-  // xButton?.click();
+  
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const [addMeetingSchedule] = useMutation(ADD_MEETING);
+  const [addMeetingSchedule] = useMutation(ADD_MEETING, {
+    refetchQueries: [{ query: QUERY_USER, variables: { id: userId } }],
+  });
   const onAppointmentAdding = async (e: any) => {
-    console.log(e);
+    
     try {
-      const { data } = await addMeetingSchedule({
+      await addMeetingSchedule({
         variables: {
           startDate: e.appointmentData.startDate,
           endDate: e.appointmentData.endDate,
-          dateId: "674b9450011dfd3641575e83",
+          dateId: userId,
           description: e.appointmentData.description,
           text: e.appointmentData.text,
         },
       });
-      console.log(data);
+      
     } catch (error) {
       console.error(error);
       e.cancel = true;
