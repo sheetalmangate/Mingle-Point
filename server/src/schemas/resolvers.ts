@@ -202,9 +202,7 @@ const resolvers = {
       subscribe: (_: any, __: any, context: Context) => {
         return context.pubsub.asyncIterator(MESSAGE_ADDED);
       },
-      resolve: (payload: { messageAdded: any }, context: Context) => {
-        console.log('Receiver:', payload.messageAdded.receiver);
-        console.log('Current user:', context.user ? context.user.username : 'null');
+      resolve: (payload: { messageAdded: any },_: any, context: Context) => {
         // Filter messages to only send to the intended receiver
         if (context.user && (payload.messageAdded.receiver === context.user.username || payload.messageAdded.sender === context.user.username)) {
           return payload.messageAdded;

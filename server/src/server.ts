@@ -61,7 +61,7 @@ const startApolloServer = async () => {
       if (connectionParams && connectionParams.Authorization) {
         const token = (connectionParams.Authorization as string).replace("Bearer ", "").trim();
         try {
-          const { data }: any = jwt.verify(token,  "MyKanna", {
+          const { data }: any = jwt.verify(token,  process.env.JWT_SECRET_KEY || "MySecret", {
             maxAge: "2hr",
           });
           return { user: data, pubsub };
