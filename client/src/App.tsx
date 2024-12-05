@@ -1,5 +1,5 @@
-import  { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { createBrowserRouter, RouterProvider, RouteObject, Navigate } from 'react-router-dom';
 import Login from './pages/Login.js';
 // import Register from './pages/Register';
 import Home from './pages/Home';
@@ -10,20 +10,37 @@ import Profile from './pages/Profile';
 function App() {
   const [auth, setAuth] = useState<Auth | null>(null);
 
+  const routes: RouteObject[] = [
+    {
+      path: "/login",
+      element: <Login setAuth={setAuth} />,
+    },
+    // {
+    //   path: '/register',
+    //   element: <Register setAuth={setAuth} />,
+    // },
+    {
+      path: "/home",
+      element: <Home />, // Replace with your Home component
+    },
+    {
+      path: "/profile/:userId?",
+      element: <Profile />, // Replace with your Home component
+    },
+    {
+      path: "/chat",
+      element: auth ? <Chat user={auth.user} /> : <Navigate to="/login" />,
+    },
+    {
+      path: "*",
+      element: <Navigate to="/login" />,
+    },
+  ];
+
+  const router = createBrowserRouter(routes);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/Login" element={<Login setAuth={setAuth} />} />
-        {/* <Route path="/register" element={<Register setAuth={setAuth} />} /> */}
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Profile/:userId?" element={<Profile />} />
-        <Route
-          path="/Chat"
-          element={auth ? <Chat user={auth.user} /> : <Navigate to="/login" />}
-        />
-        <Route path="*" element={<Navigate to="/Login" />} />
-      </Routes>
-    </Router>
+    <RouterProvider router={router} />
   );
 }
 
