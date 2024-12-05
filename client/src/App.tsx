@@ -3,15 +3,16 @@ import { createBrowserRouter, RouterProvider, RouteObject, Navigate } from 'reac
 import Login from './pages/Login.js';
 // import Register from './pages/Register';
 import Home from './pages/Home';
-import Chat from './pages/Chat.js';
+import Chat from './pages/Chat';
 import { Auth } from './interfaces/auth.js';
+import Profile from './pages/Profile';
 
 function App() {
   const [auth, setAuth] = useState<Auth | null>(null);
 
   const routes: RouteObject[] = [
     {
-      path: '/login',
+      path: "/login",
       element: <Login setAuth={setAuth} />,
     },
     // {
@@ -19,15 +20,19 @@ function App() {
     //   element: <Register setAuth={setAuth} />,
     // },
     {
-      path: '/home',
+      path: "/home",
       element: <Home />, // Replace with your Home component
     },
     {
-      path: '/chat',
+      path: "/profile/:userId?",
+      element: <Profile />, // Replace with your Home component
+    },
+    {
+      path: "/chat",
       element: auth ? <Chat user={auth.user} /> : <Navigate to="/login" />,
     },
     {
-      path: '*',
+      path: "*",
       element: <Navigate to="/login" />,
     },
   ];
