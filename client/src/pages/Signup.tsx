@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { UserContext } from '../context/Usercontext';
+import { UserContext } from '../context/UserContext';
 import Auth from "../utils/auth";
 import { ADD_PROFILE } from '../utils/mutations';
 
