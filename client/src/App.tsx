@@ -7,6 +7,7 @@ import Chat from './pages/Chat';
 import { Auth } from './interfaces/auth.js';
 import Profile from './pages/Profile';
 
+
 function App() {
   const [auth, setAuth] = useState<Auth | null>(null);
 

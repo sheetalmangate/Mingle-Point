@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { UserContext } from '../context/UserContext';
-import Auth from "../utils/auth";
-import { ADD_PROFILE } from '../utils/mutations';
+import { Auth } from '../interfaces/auth.js';
+import { ADD_USER } from '../utils/mutations';
 
-const Register: React.FC = () => {
+
+
+function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { setIsLoggedIn } = React.useContext(UserContext);
-  const [addUser] = useMutation(ADD_PROFILE);
+  const [addUser] = useMutation(ADD_USER);
 
   const handleregister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
      const { data } = await addUser({ variables: { username, email, password } });
       setIsLoggedIn(true);
-      Auth.login(data.addUser.token);
+      setAuth(data.addUser);
+      localStorage.setItem('token',data.addUser.token);
       navigate('/home'); // Redirecting to the home page after login
     } catch (error) {
       console.error('Error logging in:', error);
