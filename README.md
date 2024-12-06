@@ -39,4 +39,4 @@ Mingle Point is a modern dating application designed to help users find their pe
 
 
 git clone https://github.com/your-username/mingle-point.git
-cd mingle-point
+
