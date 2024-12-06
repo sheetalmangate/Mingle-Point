@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Auth } from '../interfaces/auth.js';
 import { LOGIN } from '../utils/mutations';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserContext.js';
 import React from 'react';
 
 
