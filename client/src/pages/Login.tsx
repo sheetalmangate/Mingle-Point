@@ -3,17 +3,22 @@ import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Auth } from '../interfaces/auth.js';
 import { LOGIN } from '../utils/mutations';
+import { UserContext } from '../context/UserContext';
+import React from 'react';
+
 
 function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login] = useMutation(LOGIN);
   const navigate = useNavigate();
+  const { setIsLoggedIn } = React.useContext(UserContext);
 
   const handleLogin = async () => {
     try {
         console.log(email,password);
       const { data } = await login({ variables: { email, password } });
+      setIsLoggedIn(true);
       setAuth(data.login);
       localStorage.setItem('token',data.login.token);
       navigate('/chat'); // Navigate to the chat page
