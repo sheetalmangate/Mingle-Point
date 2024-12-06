@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/Usercontext';
 import Auth from "../utils/auth";
 import { ADD_PROFILE } from '../utils/mutations';
 
@@ -103,3 +103,4 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+
