@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createBrowserRouter, RouterProvider, RouteObject, Navigate } from 'react-router-dom';
 import Login from './pages/Login.js';
-// import Register from './pages/Register';
+import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Chat from './pages/Chat';
 import { Auth } from './interfaces/auth.js';
@@ -15,10 +15,10 @@ function App() {
       path: "/login",
       element: <Login setAuth={setAuth} />,
     },
-    // {
-    //   path: '/register',
-    //   element: <Register setAuth={setAuth} />,
-    // },
+    {
+      path: '/Signup',
+      element: <Signup setAuth={setAuth} />,
+    },
     {
       path: "/home",
       element: <Home />, // Replace with your Home component
