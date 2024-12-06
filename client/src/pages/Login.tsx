@@ -43,6 +43,13 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>
+      <div className="text-sm text-center text-gray-400">
+      Dont have an account yet?{" "}
+      <a href="/Signup" className="font-medium text-pink-500 hover:text-pink-400"
+          > 
+          Sign Up
+          </a>
+    </div>
     </div>
   );
 }
