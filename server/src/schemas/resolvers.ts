@@ -196,6 +196,44 @@ const resolvers = {
         return null;
       }
     },
+    updateProfile: async (_parent: any, args: any, context: IUserContext) => {
+      if (!context.user) {
+          throw forbiddenException;
+      }
+  
+      try {
+          console.log('Update Profile Args:', args.profileData); // Log received data
+  
+          const updatedUser = await User.findByIdAndUpdate(
+              context.user._id,
+              {
+                  $set: {
+                      name: args.profileData.name,
+                      age: args.profileData.age,
+                      hobbies: args.profileData.hobbies || [],
+                      profilePicture: args.profileData.profilePicture,
+                  },
+              },
+              { new: true, runValidators: true }
+          );
+  
+          if (!updatedUser) {
+              throw new GraphQLError("User not found", {
+                  extensions: { code: "NOT_FOUND" },
+              });
+          }
+  
+          return updatedUser;
+      } catch (error) {
+          console.error("Update profile error:", error);
+          throw new GraphQLError("Failed to update profile", {
+              extensions: {
+                  code: "BAD_USER_INPUT",
+                  error: error instanceof Error ? error.message : 'Unknown error occurred',
+              },
+          });
+      }
+  },
   },
   Subscription: {
     messageAdded: {

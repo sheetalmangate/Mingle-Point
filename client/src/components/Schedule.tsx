@@ -6,6 +6,8 @@ import { ADD_MEETING } from "../utils/mutations";
 import { useParams } from 'react-router-dom';
 
 const Schedule = () => {
+
+  //orange banner at the top of the page
   const xButton = document.querySelector("svg")?.parentNode as HTMLElement;
   xButton?.click();
   const { userId } = useParams();

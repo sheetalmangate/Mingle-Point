@@ -14,10 +14,11 @@ const typeDefs = gql`
     following: [User]
     meetingSchedules: [Schedule]
   }
+
   type Message {
     id: ID!
     sender: String!
-    receiver:String!
+    receiver: String!
     content: String!    
     timestamp: String!
   }
@@ -37,11 +38,18 @@ const typeDefs = gql`
     user: User
   }
 
+  input ProfileInput {
+    name: String!
+    age: Int!
+    hobbies: [String]
+    profilePicture: String
+  }
+
   type Query {
     me: User
     user(_id: ID): User
-    messages(sender:String!, receiver:String!):[Message]
-    users:[User]
+    messages(sender: String!, receiver: String!): [Message]
+    users: [User]
   }
   
   type Subscription {
@@ -51,7 +59,7 @@ const typeDefs = gql`
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    sendMessage(content:String!,username:String!):Message
+    sendMessage(content: String!, username: String!): Message
     addMeetingSchedule(
       description: String
       startDate: String!
@@ -61,7 +69,8 @@ const typeDefs = gql`
       text: String!
     ): Schedule
 
-    addProfile(name:String, age:Int,hobbies:[String],profilePicture:String): User
+    addProfile(name: String, age: Int, hobbies: [String], profilePicture: String): User
+    updateProfile(profileData: ProfileInput!): User
  
     sendFollowRequest(toUserId: ID!): User
     respondFollowRequest(fromUserId: String, accept: Boolean): User
