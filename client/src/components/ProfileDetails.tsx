@@ -3,14 +3,20 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_PROFILE } from '../utils/mutations';
 import { QUERY_USER } from '../utils/queries';
 
-interface ProfileDetailsProps {
+export interface ProfileDetailsProps {
     profile: {
-        name: string;
-        age: number;
-        hobbies: string[];
-        profilePicture?: string;
+      name: string;
+      age: number;
+      hobbies: string[];
+      profilePicture?: string;
     };
-}
+    isEditable?: boolean;
+  }
+  
+  export interface ScheduleProps {
+    userId: string;
+    isOwnSchedule: boolean;
+  }
 
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile }) => {
     const [isEditing, setIsEditing] = useState(false);

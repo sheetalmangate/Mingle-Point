@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
+import { useLocation } from 'react-router-dom';
 import { GET_USERS } from '../utils/queries';
 import Messages from '../components/Messages';
 import SendMessage from '../components/SendMessages';
@@ -10,9 +11,19 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({ user }) => {
+  const location = useLocation();
   const { data, loading, error } = useQuery(GET_USERS);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState<string>('');
+
+  // Handle direct message from URL parameter
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const directMessageUser = searchParams.get('user');
+    if (directMessageUser) {
+      setSelectedUser(directMessageUser);
+    }
+  }, [location]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -25,15 +36,14 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   };
 
   const handleSendMessage = (message: string) => {
-    // Implement the logic to send a message
     console.log(`Message sent from ${user.username} to ${selectedUser}: ${message}`);
   };
 
   return (
     <div className="p-4">
       <h2 className="text-2xl mb-4">Welcome, {user.username}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-1 border-r">
           <h3 className="text-xl mb-2">Available Users</h3>
           <ul className="divide-y">
             {otherUsers.map((u: User) => (
@@ -50,11 +60,11 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
           </ul>
         </div>
         
-        <div className="md:col-span-2">
+        <div className="md:col-span-3">
           {selectedUser ? (
             <>
               <h3 className="text-xl mb-2">Chatting with {selectedUser}</h3>
-              <div className="border rounded-lg p-4 h-[400px] overflow-y-auto mb-4">
+              <div className="border rounded-lg p-4 h-[600px] overflow-y-auto mb-4">
                 <Messages sender={user.username} receiver={selectedUser} />
               </div>
               <SendMessage

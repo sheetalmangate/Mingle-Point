@@ -65,6 +65,26 @@ class AuthService {
   logout() {
     localStorage.removeItem("token"); // Changed from "id_token" to "token"
   }
+
+  isTokenValid() {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const decoded = jwtDecode<UserToken>(token);
+      // Check if token is expired (with 5 minute buffer)
+      return decoded.exp > (Date.now() / 1000) - 300;
+    } catch {
+      return false;
+    }
+  }
+
+  refreshToken() {
+    // Remove expired token
+    localStorage.removeItem('token');
+    // Redirect to login
+    window.location.href = '/';
+  }
 }
 
 export default new AuthService();

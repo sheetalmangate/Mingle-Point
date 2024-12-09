@@ -3,12 +3,14 @@ import { QUERY_USER } from "../utils/queries";
 import ProfileForm from "../components/ProfileForm";
 import ProfileDetails from "../components/ProfileDetails";
 import Schedule from "../components/Schedule";
-import { useContext } from 'react';
-import { UserContext } from '../context/UserContext';
+import { useParams } from 'react-router-dom';
+import { ScheduleProps } from '../interfaces/ProfileTypes';
 
 const Profile = () => {
-    const { data, loading } = useQuery(QUERY_USER);
-    const { username } = useContext(UserContext);
+    const { userId } = useParams();
+    const { data, loading } = useQuery(QUERY_USER, {
+        variables: { _id: userId }
+    });
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">
@@ -16,25 +18,40 @@ const Profile = () => {
         </div>;
     }
 
-    // Check if user has profile data
-    const hasProfile = data?.user && (data.user.name || data.user.age || data.user.hobbies?.length > 0);
+    const userProfile = data?.user;
+    const isOwnProfile = !userId || userProfile?._id === data?.user?._id;
+    const hasProfile = userProfile && (userProfile.name || userProfile.age || userProfile.hobbies?.length > 0);
 
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-6">Profile for {username}</h2>
+            <h2 className="text-2xl font-bold mb-6">
+                {isOwnProfile ? 'My Profile' : `${userProfile?.username}'s Profile`}
+            </h2>
+            
             {hasProfile ? (
                 <ProfileDetails 
                     profile={{
-                        name: data.user.name,
-                        age: data.user.age,
-                        hobbies: data.user.hobbies || [],
-                        profilePicture: data.user.profilePicture
-                    }} 
+                        name: userProfile.name,
+                        age: userProfile.age,
+                        hobbies: userProfile.hobbies || [],
+                        profilePicture: userProfile.profilePicture
+                    }}
+                    isEditable={isOwnProfile}
                 />
             ) : (
-                <ProfileForm />
+                isOwnProfile ? (
+                    <ProfileForm initialData={userProfile} />
+                ) : (
+                    <p>Profile not found</p>
+                )
             )}
-            <Schedule />
+            
+            {userProfile && (
+                <Schedule 
+                    userId={userProfile._id}
+                    isOwnSchedule={isOwnProfile}
+                />
+            )}
         </div>
     );
 };

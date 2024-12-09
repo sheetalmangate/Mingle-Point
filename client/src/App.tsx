@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, RouterProvider, RouteObject, Navigate, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, RouteObject, Navigate } from 'react-router-dom';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
@@ -14,8 +14,8 @@ import { UserProvider } from './context/UserContext';
 
 export function App() {
   const [auth, setAuth] = useState<Auth | null>(null);
-  console.log('Auth State:', auth);
-
+  const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -33,12 +33,17 @@ export function App() {
         }
       } catch (error) {
         console.error('Error decoding token:', error);
+        localStorage.removeItem('token'); 
       }
     }
+    setIsLoading(false);
   }, []);
 
+  if (isLoading) {
+    return <div>Loading...</div>; 
+  }
 
-  const routes: RouteObject[] = [
+    const routes: RouteObject[] = [
     {
       path: '/',
       element: <Login setAuth={setAuth} />,
@@ -61,7 +66,7 @@ export function App() {
         },
         {
           path: 'profile/:userId?',
-          element: <Profile />,
+          element: auth?.user ? ( <Profile /> ) : null,
         },
         {
           path: 'chat',
@@ -83,4 +88,3 @@ export function App() {
     </UserProvider>
   );
 }
-

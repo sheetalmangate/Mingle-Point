@@ -2,21 +2,18 @@ import { type FormEvent, useState, type ChangeEvent } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PROFILE } from '../../utils/mutations';
 import { QUERY_USER } from '../../utils/queries';
+import { ProfileFormProps } from '../../interfaces/ProfileTypes';
 
-const ProfileForm = () => {
+const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
   const [formState, setFormState] = useState({
-    name: '',
-    age: '',
-    hobbies: '',
-    profilePicture: ''
+    name: initialData?.name || '',
+    age: initialData?.age?.toString() || '',
+    hobbies: initialData?.hobbies?.join(', ') || '',
+    profilePicture: initialData?.profilePicture || ''
   });
 
   const [addProfile, { error }] = useMutation(ADD_PROFILE, {
-    refetchQueries: [{ query: QUERY_USER }],
-    onCompleted: () => {
-      // Add success message or redirect to profile page
-      
-    }
+    refetchQueries: [{ query: QUERY_USER }]
   });
 
   const handleFormSubmit = async (event: FormEvent) => {
@@ -34,12 +31,15 @@ const ProfileForm = () => {
         },
       });
 
-      setFormState({
-        name: '',
-        age: '',
-        hobbies: '',
-        profilePicture: ''
-      });
+      // Clear form only if it's a new profile, not an edit
+      if (!initialData) {
+        setFormState({
+          name: '',
+          age: '',
+          hobbies: '',
+          profilePicture: ''
+        });
+      }
 
     } catch (err) {
       console.error('Error adding profile:', err);

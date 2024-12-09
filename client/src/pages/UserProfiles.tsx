@@ -11,7 +11,7 @@ interface UserProfilesProps {
 const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
     const { data, loading, error } = useQuery(GET_USERS);
     const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();  // Add this
+    const navigate = useNavigate();
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -22,7 +22,11 @@ const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
     );
 
     const handleSendMessage = (username: string) => {
-        navigate(`/chat?user=${username}`);  // Use navigate instead of window.location
+        navigate(`/chat?user=${username}`);
+    };
+
+    const handleViewProfile = (userId: string) => {
+        navigate(`/profile/${userId}`);
     };
 
     return (
@@ -44,7 +48,10 @@ const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {filteredUsers.map((user: User) => (
                         <div key={user._id} className="border rounded-lg p-4 hover:shadow-lg transition">
-                            <div className="flex items-center space-x-4">
+                            <div 
+                                className="flex items-center space-x-4 cursor-pointer"
+                                onClick={() => handleViewProfile(user._id)}
+                            >
                                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
                                     <span className="text-white text-xl">
                                         {user.username.charAt(0).toUpperCase()}
@@ -55,14 +62,22 @@ const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
                                     <p className="text-gray-600">{user.email}</p>
                                 </div>
                             </div>
-                            {user._id !== currentUser._id && (
+                            <div className="mt-4 flex gap-2">
                                 <button
-                                    onClick={() => handleSendMessage(user.username)}
-                                    className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    onClick={() => handleViewProfile(user._id)}
+                                    className="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                                 >
-                                    Send Message
+                                    View Profile
                                 </button>
-                            )}
+                                {user._id !== currentUser._id && (
+                                    <button
+                                        onClick={() => handleSendMessage(user.username)}
+                                        className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    >
+                                        Send Message
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
