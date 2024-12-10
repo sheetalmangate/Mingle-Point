@@ -76,6 +76,7 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
           </div>
         </div>
       </div>
+
     </div>
   );
 }
