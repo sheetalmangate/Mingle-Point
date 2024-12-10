@@ -1,31 +1,23 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model} from "mongoose";
 
 interface IMessage{
-    sender: Types.ObjectId;
-    receiver: Types.ObjectId;
+    sender: String;
+    receiver: String;
     content: string;
-    timestamp: string;
+    timestamp: Date;
 }
 
 const messageSchema = new Schema<IMessage>(
     {
-        sender: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
-        receiver: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
+        sender: { type: String, required: true },
+        receiver: { type: String, required: true },
         content: {
             type: String,
             required: true,
         },
         timestamp: {
-            type: String,
-            required: true,
+            type: Date,
+            default: Date.now ,
         },
     },
     {
