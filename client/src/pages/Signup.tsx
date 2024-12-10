@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { UserContext } from '../context/UserContext.js';
-import { Auth } from '../interfaces/auth.js';
-import { ADD_USER } from '../utils/mutations';
-
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { UserContext } from "../context/UserContext.js";
+import { Auth } from "../interfaces/auth.js";
+import { ADD_USER } from "../utils/mutations";
 
 function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { setIsLoggedIn } = React.useContext(UserContext);
   const [addUser] = useMutation(ADD_USER);
@@ -18,28 +16,33 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
   const handleregister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-     const { data } = await addUser({ variables: { username, email, password } });
+      const { data } = await addUser({
+        variables: { username, email, password },
+      });
       setIsLoggedIn(true);
       setAuth(data.addUser);
-      localStorage.setItem('token',data.addUser.token);
-      navigate('/home'); // Redirecting to the home page after login
+      localStorage.setItem("token", data.addUser.token);
+      navigate("/home"); // Redirecting to the home page after login
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
     }
   };
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 bg-opacity-80 backdrop-blur-lg rounded-2xl shadow-2xl">
-        <h2 className="text-4xl font-extrabold text-center text-white">Join Us!</h2>
+        <h2 className="text-4xl font-extrabold text-center text-white">
+          Join Us!
+        </h2>
         <p className="text-sm text-center text-gray-400">
           Sign up and find your perfect match today!
         </p>
         <form className="mt-8 space-y-6" onSubmit={handleregister}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="sr-only">Username</label>
+              <label htmlFor="username" className="sr-only">
+                Username
+              </label>
               <input
                 id="username"
                 name="username"
@@ -53,7 +56,9 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
               />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
               <input
                 id="email"
                 name="email"
@@ -67,7 +72,9 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
@@ -92,18 +99,13 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
         </form>
         <div className="text-sm text-center text-gray-400">
           Already have an account?{" "}
-          <a
-            href="/"
-            className="font-medium text-pink-500 hover:text-pink-400"
-          >
+          <a href="/" className="font-medium text-pink-500 hover:text-pink-400">
             Login
           </a>
         </div>
       </div>
     </div>
   );
-  
-};
+}
 
 export default Register;
-
