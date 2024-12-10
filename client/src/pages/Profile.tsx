@@ -23,7 +23,8 @@ const Profile = () => {
     const hasProfile = userProfile && (userProfile.name || userProfile.age || userProfile.hobbies?.length > 0);
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="min-h-screen flex items-center justify-center bg-signup">
+      <div className="container mx-auto p-4 bg-gray-900 bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700">
             <h2 className="text-2xl font-bold mb-6">
                 {isOwnProfile ? 'My Profile' : `${userProfile?.username}'s Profile`}
             </h2>
@@ -52,6 +53,7 @@ const Profile = () => {
                     isOwnSchedule={isOwnProfile}
                 />
             )}
+        </div>
         </div>
     );
 };
