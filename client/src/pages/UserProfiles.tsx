@@ -30,6 +30,7 @@ const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
     };
 
     return (
+        <div className="min-h-screen bg-signup flex items-center justify-center">
         <div className="p-4">
             <div className="mb-6">
                 <input
@@ -83,6 +84,7 @@ const UserProfiles: React.FC<UserProfilesProps> = ({ currentUser }) => {
                 </div>
             )}
         </div>
+    </div>
     );
 };
 

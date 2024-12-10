@@ -40,23 +40,25 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl mb-4">Welcome, {user.username}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-1 border-r">
-          <h3 className="text-xl mb-2">Available Users</h3>
-          <ul className="divide-y">
-            {otherUsers.map((u: User) => (
-              <li 
-                key={u._id}
-                onClick={() => handleUserSelect(u.username)}
-                className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                  selectedUser === u.username ? 'bg-blue-50' : ''
-                }`}
-              >
-                {u.username}
-              </li>
-            ))}
+    
+    <div className="min-h-screen bg-signup flex items-start justify-start">
+      <div className="p-4">
+        <h2 className="text-2xl mb-4">Welcome, {user.username}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="md:col-span-1 border-r">
+            <h3 className="text-xl mb-2">Available Users</h3>
+            <ul className="divide-y">
+              {otherUsers.map((u: User) => (
+                <li 
+                  key={u._id}
+                  onClick={() => handleUserSelect(u.username)}
+                  className={`p-2 cursor-pointer hover:bg-gray-100 ${
+                    selectedUser === u.username ? 'bg-blue-50' : ''
+                  }`}
+                >
+                  {u.username}
+                </li>
+              ))}
           </ul>
         </div>
         
@@ -81,6 +83,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };
