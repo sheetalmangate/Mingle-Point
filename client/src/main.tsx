@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
-import App from './App';
+import {App} from './App';
 import './index.css';
 
 // Mock function to get token, replace with actual implementation
