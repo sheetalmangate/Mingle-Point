@@ -1,3 +1,4 @@
+
 import { User } from "../interfaces/user";
 
 interface HomeProps {
@@ -21,3 +22,4 @@ interface HomeProps {
   };
   
     export default Home;
+
