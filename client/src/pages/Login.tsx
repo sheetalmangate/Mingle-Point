@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
-import { Auth } from '../interfaces/auth.js';
-import { LOGIN } from '../utils/mutations';
-import { UserContext } from '../context/UserContext.js';
-import { useContext } from 'react';
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
+import { Auth } from "../interfaces/auth.js";
+import { LOGIN } from "../utils/mutations";
+import { UserContext } from "../context/UserContext.js";
+import { useContext } from "react";
 
 function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [login] = useMutation(LOGIN);
   const navigate = useNavigate();
   const { setIsLoggedIn, setUsername } = useContext(UserContext);
@@ -19,8 +19,8 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
       setIsLoggedIn(true);
       setUsername(data.login.user.username);
       setAuth(data.login);
-      localStorage.setItem('token', data.login.token);
-      navigate('/home');
+      localStorage.setItem("token", data.login.token);
+      navigate("/home");
     } catch (error) {
       console.error("Failed to log in:", error);
     }

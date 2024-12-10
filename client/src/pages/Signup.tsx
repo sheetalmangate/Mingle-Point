@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { UserContext } from '../context/UserContext.js';
-import { Auth } from '../interfaces/auth.js';
-import { ADD_USER } from '../utils/mutations';
-
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { UserContext } from "../context/UserContext.js";
+import { Auth } from "../interfaces/auth.js";
+import { ADD_USER } from "../utils/mutations";
 
 function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { setIsLoggedIn } = React.useContext(UserContext);
   const [addUser] = useMutation(ADD_USER);
@@ -18,16 +16,17 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
   const handleregister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-     const { data } = await addUser({ variables: { username, email, password } });
+      const { data } = await addUser({
+        variables: { username, email, password },
+      });
       setIsLoggedIn(true);
       setAuth(data.addUser);
-      localStorage.setItem('token',data.addUser.token);
-      navigate('/home'); // Redirecting to the home page after login
+      localStorage.setItem("token", data.addUser.token);
+      navigate("/home"); // Redirecting to the home page after login
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-signup">
@@ -101,4 +100,3 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
 
 
 export default Register;
-

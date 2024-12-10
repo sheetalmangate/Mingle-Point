@@ -4,7 +4,7 @@ import ProfileForm from "../components/ProfileForm";
 import ProfileDetails from "../components/ProfileDetails";
 import Schedule from "../components/Schedule";
 import { useParams } from 'react-router-dom';
-import { ScheduleProps } from '../interfaces/ProfileTypes';
+// import { ScheduleProps } from '../interfaces/ProfileTypes';
 
 const Profile = () => {
     const { userId } = useParams();
