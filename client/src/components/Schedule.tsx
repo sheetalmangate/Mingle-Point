@@ -3,14 +3,14 @@ import Scheduler, { Editing } from "devextreme-react/scheduler";
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
 import { ADD_MEETING } from "../utils/mutations";
-import { useParams } from 'react-router-dom';
+import { ScheduleProps } from '../interfaces/ProfileTypes';
+import React from 'react';
 
-const Schedule = () => {
+const Schedule: React.FC<ScheduleProps> = ({ userId, isOwnSchedule }) => {
 
   //orange banner at the top of the page
   const xButton = document.querySelector("svg")?.parentNode as HTMLElement;
   xButton?.click();
-  const { userId } = useParams();
   const { data, loading } = useQuery(QUERY_USER, { variables: { id: userId } });
   const scheduleData = data?.user.meetingSchedules || [];
   
@@ -42,21 +42,26 @@ const Schedule = () => {
   }
   return (
     <div>
-      <h1>Schedule</h1>
-      <Scheduler
-        dataSource={scheduleData}
-        views={["day", "week", "month"]}
-        defaultCurrentView="week"
-        defaultCurrentDate={new Date()}
-        showAllDayPanel={false}
-        height={600}
-        onAppointmentAdding={onAppointmentAdding}
-        dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
-      >
-        <Editing allowAdding={!userId ? false : true} />
-      </Scheduler>
+        <h1>{isOwnSchedule ? 'My Schedule' : 'Schedule Meeting'}</h1>
+        <Scheduler
+            dataSource={scheduleData}
+            views={["day", "week", "month"]}
+            defaultCurrentView="week"
+            defaultCurrentDate={new Date()}
+            showAllDayPanel={false}
+            height={600}
+            onAppointmentAdding={onAppointmentAdding}
+            dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+        >
+            <Editing 
+                allowAdding={true}
+                allowDeleting={isOwnSchedule}
+                allowUpdating={isOwnSchedule}
+            />
+        </Scheduler>
     </div>
-  );
-}
+);
+};
+
 export default Schedule;
   

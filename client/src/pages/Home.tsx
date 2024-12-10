@@ -13,9 +13,7 @@ interface HomeProps {
       <div>
   
         <h1>Home Page</h1>
-  
         <p>Welcome, {user.username}!</p>
-  
       </div>
   
     );
