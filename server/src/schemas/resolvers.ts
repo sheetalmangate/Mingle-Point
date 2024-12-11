@@ -74,6 +74,7 @@ const resolvers = {
       _parent: any,
       { email, password }: { email: string; password: string }
     ) => {
+      console.log(email);
       const user = await User.findOne({ email });
 
       if (!user || !(await user.isCorrectPassword(password))) {
