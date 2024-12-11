@@ -54,7 +54,7 @@ const Schedule: React.FC<ScheduleProps> = ({ userId, isOwnSchedule }) => {
             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
         >
             <Editing 
-                allowAdding={true}
+                allowAdding={!isOwnSchedule?true:false}
                 allowDeleting={isOwnSchedule}
                 allowUpdating={isOwnSchedule}
             />
