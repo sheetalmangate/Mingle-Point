@@ -6,11 +6,11 @@ import { Auth } from "../interfaces/auth.js";
 import { ADD_USER } from "../utils/mutations";
 
 function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
-  const [username, setUsername] = useState("");
+  const [username, setRegUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setIsLoggedIn } = React.useContext(UserContext);
+  const { setIsLoggedIn, setUsername } = React.useContext(UserContext);
   const [addUser] = useMutation(ADD_USER);
 
   const handleregister = async (e: React.FormEvent) => {
@@ -21,6 +21,7 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
       });
       setIsLoggedIn(true);
       setAuth(data.addUser);
+      setUsername(data.addUser.user.username);
       localStorage.setItem("token", data.addUser.token);
       navigate("/home"); // Redirecting to the home page after login
     } catch (error) {
@@ -46,8 +47,8 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
               autoComplete="username"
               required
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+              onChange={(e) => setRegUsername(e.target.value)}
+              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-200 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
             />
           </div>
           <div>
@@ -60,7 +61,7 @@ function Register({ setAuth }: { setAuth: (auth: Auth) => void }) {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-200 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
             />
           </div>
           <div>

@@ -13,8 +13,9 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
   const navigate = useNavigate();
   const { setIsLoggedIn, setUsername } = useContext(UserContext);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e:React.FormEvent) => {
     try {
+      e.preventDefault();
       const { data } = await login({ variables: { email, password } });
       setIsLoggedIn(true);
       setUsername(data.login.user.username);
@@ -42,7 +43,7 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-accentPink focus:border-accentPink sm:text-sm"
+              className="w-full px-4 py-3 text-pink-900 placeholder-pink-400 bg-gray-200 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-accentPink focus:border-accentPink sm:text-sm"
               placeholder="Email"
             />
           </div>
@@ -56,7 +57,7 @@ function Login({ setAuth }: { setAuth: (auth: Auth) => void }) {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 text-gray-900 placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-accentPink focus:border-accentPink sm:text-sm"
+              className="w-full px-4 py-3 text-pink-900 placeholder-pink-400 bg-gray-200 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-accentPink focus:border-accentPink sm:text-sm"
               placeholder="Password"
             />
           </div>
