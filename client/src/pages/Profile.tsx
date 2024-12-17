@@ -4,12 +4,15 @@ import ProfileForm from "../components/ProfileForm";
 import ProfileDetails from "../components/ProfileDetails";
 import Schedule from "../components/Schedule";
 import { useParams } from 'react-router-dom';
-// import { ScheduleProps } from '../interfaces/ProfileTypes';
+
+//DO NOT TOUCH THIS CODE!!!!
+const xButton = document.querySelector("svg")?.parentNode as HTMLElement;
+xButton?.click();
 
 const Profile = () => {
     const { userId } = useParams();
     const { data, loading } = useQuery(QUERY_USER, {
-        variables: { _id: userId }
+        variables: { id: userId }
     });
 
     if (loading) {
@@ -19,12 +22,12 @@ const Profile = () => {
     }
 
     const userProfile = data?.user;
-    const isOwnProfile = !userId || userProfile?._id === data?.user?._id;
+    const isOwnProfile = !userId;
     const hasProfile = userProfile && (userProfile.name || userProfile.age || userProfile.hobbies?.length > 0);
+    console.log(isOwnProfile);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-signup">
-      <div className="container mx-auto p-4 bg-gray-900 bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700">
+        <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold mb-6">
                 {isOwnProfile ? 'My Profile' : `${userProfile?.username}'s Profile`}
             </h2>
@@ -53,7 +56,6 @@ const Profile = () => {
                     isOwnSchedule={isOwnProfile}
                 />
             )}
-        </div>
         </div>
     );
 };
