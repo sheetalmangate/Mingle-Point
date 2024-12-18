@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { PubSub } from 'graphql-subscriptions';
+import cors from 'cors';
 dotenv.config();
 const pubsub:PubSub = new PubSub();
 const __filename = fileURLToPath(import.meta.url);
@@ -37,6 +38,13 @@ const startApolloServer = async () => {
   await db;
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+  app.use(
+    cors({
+      origin: "http://localhost:3001",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  );
 
   server.applyMiddleware({ app: app as unknown as ExpressContext['req']['app'], path: '/graphql' });
 
