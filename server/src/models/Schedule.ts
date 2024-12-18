@@ -3,25 +3,23 @@ import { Schema, model, Types } from "mongoose";
 interface ISchedule  {
   _id: Types.ObjectId;
   date: string;
-  startTime: string;
-  endTime: string;
+  startDate: string;
+  endDate: string;
   description: string | null;
   dateId: Types.ObjectId;
   location: string | null;
+  text: string;
 }
 
 const scheduleSchema = new Schema<ISchedule>(
   {
-    date: {
-      type: String,
-      required: true,
-      },
-    startTime: {
+    
+    startDate: {
       type: String,
       required: true,
       
     },
-    endTime: {
+    endDate: {
       type: String,
       required: true,
     },
@@ -37,6 +35,10 @@ const scheduleSchema = new Schema<ISchedule>(
     location: {
       type: String,
       required: false,
+    },
+    text: {
+      type: String,
+      required: true,
     },
   },
   // set this to use virtual below
