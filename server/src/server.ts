@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { PubSub } from 'graphql-subscriptions';
+import cors from 'cors';
 dotenv.config();
 const pubsub:PubSub = new PubSub();
 const __filename = fileURLToPath(import.meta.url);
@@ -37,6 +38,13 @@ const startApolloServer = async () => {
   await db;
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  );
 
   server.applyMiddleware({ app: app as unknown as ExpressContext['req']['app'], path: '/graphql' });
 
@@ -53,6 +61,10 @@ const startApolloServer = async () => {
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: '/graphql',
+  });
+  wsServer.on('headers', (headers) => {
+    headers.push('Access-Control-Allow-Origin: https://localhost:3000');
+    headers.push('Access-Control-Allow-Credentials: true');
   });
   
   useServer({ schema,
